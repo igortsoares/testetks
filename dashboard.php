@@ -77,21 +77,6 @@
                 <!-- Seção Principal dos OKRs -->
                 <section class="okr-main-list">
                     <div class="okr-list-header">
-                        <div class="area-selector">
-                            <button class="area-selector-btn" id="area-selector-btn">
-                                <span id="selected-area-name">Governança</span>
-                                <i class='bx bx-chevron-down'></i>
-                            </button>
-                            <div class="area-dropdown" id="area-dropdown">
-                                <a href="#" data-area="Vendas">Vendas</a>
-                                <a href="#" data-area="Marketing">Marketing</a>
-                                <a href="#" data-area="Financeiro">Financeiro</a>
-                                <a href="#" data-area="Produto">Produto</a>
-                                <a href="#" data-area="Tecnologia">Tecnologia</a>
-                                <a href="#" data-area="Governança">Governança</a>
-                                <a href="#" data-area="Customer Success">Customer Success</a>
-                            </div>
-                        </div>
                         <h2>Acompanhamento dos Objetivos e KRs</h2>
                         <button class="primary-action-btn" type="button">
                             <i class='bx bx-plus'></i> Adicionar Objetivo

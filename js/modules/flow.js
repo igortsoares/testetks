@@ -1,14 +1,13 @@
 /* ================================================================ */
 /* Arquivo: /js/modules/flow.js                                     */
 /* Descrição: Módulo Flow com timer e lógica de tarefas.            */
-/* Versão: 2.4 (Ordenação e Filtros)                                */
+/* Versão: 2.3 (Melhorias de UI e Progresso Detalhado)              */
 /* ================================================================ */
 
 // --- Variáveis de Cache do DOM ---
 let startBtn, resetBtn, pauseBtn, timerDisplay, timerConfigModal, timerMinutesInput;
 let addTaskFloatBtn, addTaskListBtn, toggleTasksBtn, clearCompletedBtn;
 let addTaskModal, addTaskForm, taskIdInput;
-let filterPriority, filterStatus, filterBtn;
 
 // --- Variáveis Globais do Módulo ---
 let tasks = [];
@@ -17,13 +16,9 @@ let pomodoroIsRunning = false;
 let pomodoroCurrentTime = 25 * 60;
 let pomodoroConfiguredTime = 25 * 60;
 let todayCycles = 0;
-let totalFocusTime = 0;
+let totalFocusTime = 0; // em segundos
 let timerSound = null;
 let flowInitialized = false;
-
-let sortState = { column: 'date', direction: 'asc' };
-// [NOVO] Estado dos filtros
-let filterState = { priority: '', status: '' };
 
 /**
  * Função principal de inicialização do módulo Flow.
@@ -35,8 +30,6 @@ export function initFlow() {
     cacheDOMElements();
     setupEventListeners();
     initTimerSound();
-    initTableSorting();
-    initTableFiltering(); // [NOVO]
     loadFlowData();
     updateAllDisplays();
 
@@ -57,9 +50,6 @@ function cacheDOMElements() {
     timerMinutesInput = document.getElementById('timer-minutes');
     addTaskModal = document.getElementById('add-task-modal');
     addTaskForm = document.getElementById('add-task-form');
-    filterPriority = document.getElementById('filter-priority');
-    filterStatus = document.getElementById('filter-status');
-    filterBtn = document.getElementById('filter-btn');
     
     const existingIdInput = document.getElementById('task-id');
     if (!existingIdInput && addTaskForm) {
@@ -105,10 +95,15 @@ function setupEventListeners() {
 // LÓGICA DO TIMER POMODORO
 // ============================================================
 function initTimerSound() {
-    if (typeof Howl === 'undefined') return;
+    if (typeof Howl === 'undefined') {
+        console.warn('⚠️ Howler.js não encontrado. O som não funcionará.');
+        return;
+    }
     timerSound = new Howl({
         src: ['assets/sounds/timer-end.mp3'],
         volume: 0.7,
+        onload: () => console.log('🔊 Som do timer carregado.'),
+        onloaderror: (id, err) => console.error('❌ Erro ao carregar som do timer. Verifique o caminho do arquivo.', err)
     });
 }
 
@@ -175,91 +170,8 @@ function confirmTimerConfig() {
 }
 
 // ============================================================
-// LÓGICA DE TAREFAS (CRUD, ORDENAÇÃO, FILTRO)
+// LÓGICA DE TAREFAS (CRUD)
 // ============================================================
-
-/**
- * [NOVO] Inicializa a ordenação da tabela
- */
-function initTableSorting() {
-    const headers = document.querySelectorAll('.tasks-table th.sortable');
-    headers.forEach(header => {
-        header.addEventListener('click', () => {
-            const column = header.dataset.column;
-            if (sortState.column === column) {
-                sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
-            } else {
-                sortState.column = column;
-                sortState.direction = 'asc';
-            }
-            updateAllDisplays();
-        });
-    });
-}
-
-/**
- * [NOVO] Inicializa a filtragem da tabela
- */
-function initTableFiltering() {
-    if (filterBtn) {
-        filterBtn.addEventListener('click', () => {
-            filterState.priority = filterPriority.value;
-            filterState.status = filterStatus.value;
-            updateAllDisplays();
-        });
-    }
-}
-
-/**
- * [NOVO] Retorna uma lista de tarefas filtrada
- */
-function getFilteredTasks() {
-    let filtered = [...tasks];
-    if (filterState.priority) {
-        filtered = filtered.filter(task => task.priority === filterState.priority);
-    }
-    if (filterState.status) {
-        const isCompleted = filterState.status === 'completed';
-        filtered = filtered.filter(task => task.completed === isCompleted);
-    }
-    return filtered;
-}
-
-/**
- * [NOVO] Ordena um array de tarefas
- */
-function sortTasks(tasksToSort) {
-    const { column, direction } = sortState;
-    const modifier = direction === 'asc' ? 1 : -1;
-
-    const priorityOrder = {
-        'urgent-important': 1,
-        'not-urgent-important': 2,
-        'urgent-not-important': 3,
-        'not-urgent-not-important': 4
-    };
-
-    tasksToSort.sort((a, b) => {
-        let valA, valB;
-        if (column === 'priority') {
-            valA = priorityOrder[a.priority] || 5;
-            valB = priorityOrder[b.priority] || 5;
-        } else if (column === 'status') {
-            valA = a.completed;
-            valB = b.completed;
-        } else {
-            valA = a[column] || '';
-            valB = b[column] || '';
-        }
-
-        if (valA < valB) return -1 * modifier;
-        if (valA > valB) return 1 * modifier;
-        return 0;
-    });
-    return tasksToSort;
-}
-
-
 function openAddTaskModal(taskId = null) {
     if (!addTaskModal || !addTaskForm) return;
     addTaskForm.reset();
@@ -371,13 +283,9 @@ function updateAllDisplays() {
     updatePomodoroDisplay();
     updatePomodoroStats();
     updateMissionStats();
-    updateDetailedProgress();
+    updateDetailedProgress(); // [NOVO] Chama a nova função
     updateMatrix();
-
-    // [MODIFICADO] Pega as tarefas filtradas, ordena, e depois renderiza a lista.
-    const filteredTasks = getFilteredTasks();
-    const sortedTasks = sortTasks(filteredTasks);
-    updateTasksList(sortedTasks);
+    updateTasksList();
 }
 
 function updatePomodoroDisplay() {
@@ -420,12 +328,14 @@ function updateMissionStats() {
     const overallProgress = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
     updateElement('overall-progress', `${overallProgress}%`);
 
+    // [NOVO] Adiciona/remove a classe 'completed' no círculo de progresso
     const progressCircle = document.getElementById('progress-circle-container');
     if (progressCircle) {
         progressCircle.classList.toggle('completed', overallProgress === 100 && tasks.length > 0);
     }
 }
 
+// [NOVO] Função para renderizar o progresso detalhado
 function updateDetailedProgress() {
     const container = document.getElementById('detailed-progress-content');
     if (!container) return;
@@ -518,11 +428,11 @@ function createTaskMatrixElement(task) {
     return div;
 }
 
-function updateTasksList(tasksToRender) {
+function updateTasksList() {
     const tbody = document.getElementById('tasks-table-body');
     if (!tbody) return;
     tbody.innerHTML = '';
-    tasksToRender.forEach(task => {
+    tasks.forEach(task => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${task.title}</td>

@@ -301,9 +301,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    max-height: 300px; /* Altura máxima antes de scroll */
-    overflow-y: auto; /* Adiciona scroll vertical quando necessário */
-    padding-right: 0.5rem; /* Espaço para a barra de rolagem */
 }
 
 .progress-legend li {
@@ -425,7 +422,6 @@
     font-weight: 500;
     color: var(--primary-text);
     transition: all var(--transition-normal);
-    vertical-align: middle;
 }
 
 .dark-mode .toggle-tasks-btn {
@@ -445,43 +441,12 @@
     align-items: center;
 }
 
-.tasks-filters {
-    display: flex;
-    gap: 0.75rem;
-    align-items: center;
-    margin-left: auto; /* Empurra os filtros para a esquerda das ações */
-}
-
-.form-select-sm {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    background: var(--card-bg);
-    color: var(--primary-text);
-    font-size: 0.9rem;
-}
-
-.btn-sm {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--radius-lg);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.btn-primary-sm {
-    background: var(--primary-accent);
-    color: white;
-}
-
 .add-task-btn, .clear-completed-btn {
     display: flex; align-items: center; gap: 0.5rem;
     padding: 0.75rem 1.25rem; border: none;
     border-radius: var(--radius-lg); font-size: 0.9rem;
     font-weight: 500; cursor: pointer;
     transition: all var(--transition-normal);
-    vertical-align: middle;
 }
 
 .add-task-btn { background: var(--primary-accent); color: white; }
@@ -499,8 +464,6 @@
 .tasks-table { width: 100%; border-collapse: collapse; }
 .tasks-table th, .tasks-table td { padding: 1rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
 .tasks-table th { background: var(--main-bg); text-align: left; }
-.tasks-table th.sortable { cursor: pointer; user-select: none; }
-.tasks-table th.sortable:hover { background-color: var(--border-color); }
 .tasks-table tr:last-child td { border-bottom: none; }
 .tasks-table tr:hover { background-color: var(--main-bg); }
 
