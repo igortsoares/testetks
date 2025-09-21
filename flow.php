@@ -145,6 +145,21 @@ include 'components/_head.php';
                         <span>Exibir Tarefas (0)</span>
                         <i class='bx bx-chevron-down'></i>
                     </button>
+                    <div class="tasks-filters">
+                        <select id="filter-priority" class="form-select-sm">
+                            <option value="">Toda Prioridade</option>
+                            <option value="urgent-important">Urgente/Importante</option>
+                            <option value="not-urgent-important">Não Urgente/Importante</option>
+                            <option value="urgent-not-important">Urgente/Não Importante</option>
+                            <option value="not-urgent-not-important">Não Urgente/Não Importante</option>
+                        </select>
+                        <select id="filter-status" class="form-select-sm">
+                            <option value="">Todo Status</option>
+                            <option value="pending">Pendente</option>
+                            <option value="completed">Concluída</option>
+                        </select>
+                        <button id="filter-btn" class="btn-sm btn-primary-sm">Filtrar</button>
+                    </div>
                     <div class="tasks-actions">
                         <button id="add-task-list-btn" class="add-task-btn"><i class='bx bx-plus'></i> Adicionar Tarefa</button>
                         <button id="clear-completed-btn" class="clear-completed-btn"><i class='bx bx-trash'></i> Limpar Concluídas</button>
@@ -154,12 +169,12 @@ include 'components/_head.php';
                     <table class="tasks-table">
                         <thead>
                             <tr>
-                                <th>Tarefa</th>
-                                <th>Prioridade</th>
-                                <th>Tempo Estimado</th>
+                                <th class="sortable" data-column="title">Tarefa <i class='bx bxs-sort-alt'></i></th>
+                                <th class="sortable" data-column="priority">Prioridade <i class='bx bxs-sort-alt'></i></th>
+                                <th class="sortable" data-column="time">Tempo Estimado <i class='bx bxs-sort-alt'></i></th>
                                 <th>KR Vinculado</th>
-                                <th>Data de Entrega</th>
-                                <th>Status</th>
+                                <th class="sortable" data-column="date">Data de Entrega <i class='bx bxs-sort-alt'></i></th>
+                                <th class="sortable" data-column="status">Status <i class='bx bxs-sort-alt'></i></th>
                                 <th>Ações</th>
                             </tr>
                         </thead>

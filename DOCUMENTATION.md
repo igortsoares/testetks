@@ -108,7 +108,7 @@ Até a presente data, a "Central de OKRs" possui as seguintes funcionalidades 10
     - Integrar a autenticação de usuários do Supabase.
     - Proteger a `dashboard.php` para que apenas usuários logados possam acessá-la, usando sessões PHP.
 
-3.  **Fases Futurais:**
+3.  **Fases Futuras:**
     - Desenvolvimento de novos módulos (ex: Gestão Financeira) seguindo a arquitetura estabelecida.
     - Criação de um painel de administração de usuários.
 

@@ -5,6 +5,9 @@
     
     <!-- CSS Principal -->
     <link rel="stylesheet" href="css/main.css?v=8.0">
+    <link rel="stylesheet" href="css/flow.css?v=3.5">
+    <!-- [NOVO] Adicionado o CSS do módulo Agenda -->
+    <link rel="stylesheet" href="css/agenda.css?v=1.0">
     
     <!-- Ícones Boxicons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>

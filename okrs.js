@@ -9,6 +9,57 @@ import { showCustomConfirm, openIconPicker, openParameterPicker } from './ui.js'
 // --- Variáveis e Constantes do Módulo ---
 let objectiveIdCounter = 1;
 
+// [NOVO] Estrutura de dados de exemplo para os OKRs de diferentes áreas
+const mockOkrData = {
+    "Governança": [
+        {
+            title: "Implementar Nova Estrutura de Governança Corporativa",
+            endDate: "31/12/2025",
+            icon: "bxs-bank",
+            krs: [
+                { title: "Definir 100% dos comitês de governança", min: 0, max: 100, value: 100, unit: "%" },
+                { title: "Publicar o novo código de conduta para todos os colaboradores", min: 0, max: 1, value: 1, unit: "doc" }
+            ]
+        }
+    ],
+    "Vendas": [
+        {
+            title: "Aumentar a Receita Recorrente Mensal (MRR)",
+            endDate: "31/12/2025",
+            icon: "bxs-dollar-circle",
+            krs: [
+                { title: "Atingir R$ 50.000 de MRR", min: 10000, max: 50000, value: 25000, unit: "R$" },
+                { title: "Aumentar a taxa de conversão de trial para pago em 15%", min: 0, max: 15, value: 5, unit: "%" },
+                { title: "Conquistar 10 novos clientes B2B", min: 0, max: 10, value: 4, unit: "clientes" }
+            ]
+        },
+        {
+            title: "Expandir a Atuação para o Mercado Latam",
+            endDate: "30/06/2026",
+            icon: "bxs-plane-alt",
+            krs: [
+                { title: "Realizar 5 parcerias estratégicas na Argentina", min: 0, max: 5, value: 1, unit: "parcerias" }
+            ]
+        }
+    ],
+    "Tecnologia": [
+        {
+            title: "Reduzir o Tempo de Carregamento da Plataforma",
+            endDate: "31/12/2025",
+            icon: "bxs-timer",
+            krs: [
+                { title: "Diminuir o LCP (Largest Contentful Paint) para menos de 2s", min: 5, max: 2, value: 3.5, unit: "s" },
+                { title: "Otimizar o tamanho das imagens em 90% das páginas", min: 0, max: 90, value: 60, unit: "%" }
+            ]
+        }
+    ],
+    "Marketing": [],
+    "Financeiro": [],
+    "Produto": [],
+    "Customer Success": []
+};
+
+
 // --- Função Principal de Inicialização ---
 export async function initOKRs() {
     // Verifica se estamos na página correta
@@ -17,79 +68,130 @@ export async function initOKRs() {
 
     // Inicializa funcionalidades principais
     initAddObjectiveButton();
-    initExistingObjectives();
+    initAreaSelector(); // [NOVO]
+    renderObjectivesForArea("Governança"); // [NOVO] Carrega a área padrão
     
     // Escuta mudanças de tema para redesenhar gráficos
     document.addEventListener('themeChanged', redrawAllCharts);
+}
 
-    // Carrega dados da API (se disponível)
-    try {
-        const response = await api.fetchOKRs();
-        if (response.success) {
-            console.log("OKRs carregados com sucesso:", response.data);
-        } else {
-            console.error("Falha ao carregar OKRs:", response.error);
-        }
-    } catch (error) {
-        console.error("Erro crítico ao chamar a API de OKRs:", error);
+// --- Funções de Renderização e Lógica Principal ---
+
+/**
+ * [NOVO] Renderiza os objetivos para uma área específica
+ * @param {string} areaName - O nome da área a ser renderizada.
+ */
+function renderObjectivesForArea(areaName) {
+    const okrMainList = document.querySelector('.okr-main-list');
+    if (!okrMainList) return;
+
+    // Limpa apenas os itens de objetivo, mantendo o cabeçalho
+    const objectiveItems = okrMainList.querySelectorAll('.objective-item');
+    objectiveItems.forEach(item => item.remove());
+    const emptyMsg = okrMainList.querySelector('.empty-message');
+    if(emptyMsg) emptyMsg.remove();
+
+    const objectives = mockOkrData[areaName] || [];
+
+    if (objectives.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.className = 'empty-message';
+        emptyMessage.textContent = 'Não há objetivos definidos para esta área.';
+        emptyMessage.style.textAlign = 'center';
+        emptyMessage.style.padding = '20px';
+        okrMainList.appendChild(emptyMessage);
+    } else {
+        objectives.forEach(objData => {
+            createNewObjective(objData);
+        });
     }
-    
-    // Atualiza KPIs iniciais
     updateCompletedObjectivesKPI();
 }
 
 // --- Funções de Inicialização ---
 
 /**
+ * [NOVO] Inicializa a lógica do seletor de área
+ */
+function initAreaSelector() {
+    const selectorBtn = document.getElementById('area-selector-btn');
+    const dropdown = document.getElementById('area-dropdown');
+    const selectedAreaName = document.getElementById('selected-area-name');
+
+    if (!selectorBtn || !dropdown || !selectedAreaName) return;
+
+    selectorBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = dropdown.style.display === 'block';
+        dropdown.style.display = isOpen ? 'none' : 'block';
+        selectorBtn.classList.toggle('open', !isOpen);
+    });
+
+    dropdown.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = e.target;
+        if (target.tagName === 'A') {
+            const area = target.dataset.area;
+            selectedAreaName.textContent = area;
+            renderObjectivesForArea(area);
+            dropdown.style.display = 'none';
+            selectorBtn.classList.remove('open');
+        }
+    });
+
+    document.addEventListener('click', () => {
+        if (dropdown.style.display === 'block') {
+            dropdown.style.display = 'none';
+            selectorBtn.classList.remove('open');
+        }
+    });
+}
+
+/**
  * Inicializa o botão "Adicionar Objetivo" principal
  */
 function initAddObjectiveButton() {
     const primaryActionBtn = document.querySelector('.primary-action-btn');
-    if (!primaryActionBtn) {
-        console.warn('Botão de ação primária não encontrado');
-        return;
-    }
+    if (!primaryActionBtn) return;
 
-    // Remove listeners anteriores para evitar duplicação
     primaryActionBtn.replaceWith(primaryActionBtn.cloneNode(true));
     const newBtn = document.querySelector('.primary-action-btn');
     
     newBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Botão "Adicionar Objetivo" clicado');
         createNewObjective();
     });
-    
-    console.log('Botão "Adicionar Objetivo" inicializado');
-}
-
-/**
- * Inicializa objetivos já existentes na página
- */
-function initExistingObjectives() {
-    const existingObjectives = document.querySelectorAll('.objective-item');
-    existingObjectives.forEach(objective => {
-        activateObjectiveFeatures(objective);
-    });
-    console.log(`${existingObjectives.length} objetivos existentes inicializados`);
 }
 
 // --- Funções de Criação de Elementos ---
 
 /**
  * Cria um novo objetivo
+ * @param {object} [data=null] - Dados do objetivo a ser criado.
  */
-function createNewObjective() {
-    const newObjectiveHTML = `
+function createNewObjective(data = null) {
+    const title = data ? data.title : "Novo Objetivo - Clique para editar";
+    const endDate = data ? data.endDate : "31/12/2025";
+    const icon = data ? data.icon : "bxs-rocket";
+    const krs = data ? data.krs : [];
+
+    const okrMainList = document.querySelector('.okr-main-list');
+    if (!okrMainList) return;
+
+    const emptyMsg = okrMainList.querySelector('.empty-message');
+    if(emptyMsg) emptyMsg.remove();
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = `
         <div class="objective-item">
             <div class="objective-summary">
                 <div class="objective-info">
-                    <i class='bx bxs-rocket objective-icon'></i>
+                    <i class='bx ${icon} objective-icon'></i>
                     <div>
                         <span class="objective-label"></span>
-                        <h3 class="editable-title">Novo Objetivo - Clique para editar</h3>
-                        <span class="objective-date editable-date">Data Fim: 31/12/2025</span>
+                        <h3 class="editable-title">${title}</h3>
+                        <span class="objective-date editable-date">Data Fim: ${endDate}</span>
                     </div>
                 </div>
                 <div class="objective-progress-summary">
@@ -99,7 +201,7 @@ function createNewObjective() {
                     </div>
                     <div class="progress-details">
                         <span>Progresso</span>
-                        <strong><i class='bx bxs-flag-checkered'></i> 0 KRs</strong>
+                        <strong><i class='bx bxs-flag-checkered'></i> ${krs.length} KRs</strong>
                     </div>
                 </div>
                 <div class="objective-actions">
@@ -107,40 +209,23 @@ function createNewObjective() {
                 </div>
             </div>
             <div class="kr-details-container">
-                <button class="toggle-krs-btn">EXIBIR KRs (0) <i class='bx bx-chevron-down'></i></button>
+                <button class="toggle-krs-btn">EXIBIR KRs (${krs.length}) <i class='bx bx-chevron-down'></i></button>
                 <div class="kr-list" style="display: none;">
+                    ${krs.map(kr => createNewKRHTML(kr)).join('')}
                     <button class="add-kr-btn"><i class='bx bx-plus'></i> Adicionar KR</button>
                 </div>
             </div>
-        </div>
-    `;
+        </div>`;
     
-    const okrMainList = document.querySelector('.okr-main-list');
-    if (!okrMainList) {
-        console.error('Container .okr-main-list não encontrado');
-        return;
-    }
-    
-    // Cria elemento temporário para converter HTML
-    const tempDiv = document.createElement('div'); 
-    tempDiv.innerHTML = newObjectiveHTML;
     const newObjectiveElement = tempDiv.firstElementChild;
-    
-    // Adiciona o novo objetivo à lista
     okrMainList.appendChild(newObjectiveElement);
     
-    // Ativa funcionalidades do novo objetivo
     activateObjectiveFeatures(newObjectiveElement);
     
-    // Atualiza numeração e gráficos
     renumberObjectives();
-    renderDoughnutChart(`objective${objectiveIdCounter}Chart`, 0);
-    updateCompletedObjectivesKPI();
+    updateObjectiveProgress(newObjectiveElement);
     
-    // Incrementa contador
     objectiveIdCounter++;
-    
-    console.log('Novo objetivo criado com sucesso');
 }
 
 /**
@@ -149,23 +234,16 @@ function createNewObjective() {
 function activateObjectiveFeatures(container) {
     if (!container) return;
     
-    // Ativa edição do título
     activateEditableTitle(container);
-    
-    // Ativa seletor de data
     activateEditableDate(container);
-    
-    // Ativa botão de toggle dos KRs
     activateToggleKRs(container);
-    
-    // Ativa botão de adicionar KR
     activateAddKRButton(container);
-    
-    // Ativa botão de deletar objetivo
     activateDeleteObjective(container);
-    
-    // Ativa ícone clicável
     activateObjectiveIcon(container);
+
+    container.querySelectorAll('.kr-item').forEach(krEl => {
+        activateKRFeatures(krEl);
+    });
 }
 
 /**
@@ -175,7 +253,6 @@ function activateEditableTitle(container) {
     const titleElement = container.querySelector('.editable-title');
     if (!titleElement) return;
     
-    // Remove listeners anteriores
     titleElement.replaceWith(titleElement.cloneNode(true));
     const newTitleElement = container.querySelector('.editable-title');
     
@@ -217,15 +294,14 @@ function activateEditableDate(container) {
     const dateElement = container.querySelector('.editable-date');
     if (!dateElement) return;
     
-    // Inicializa Flatpickr se disponível
     if (typeof flatpickr !== 'undefined') {
         flatpickr(dateElement, { 
             dateFormat: "d/m/Y", 
             minDate: "today", 
             "locale": "pt", 
-            onClose: (selectedDates, dateStr, instance) => { 
+            onClose: (selectedDates, dateStr) => {
                 if (selectedDates.length > 0) {
-                    instance.element.textContent = "Data Fim: " + dateStr; 
+                    dateElement.textContent = "Data Fim: " + dateStr;
                 }
             }
         }); 
@@ -239,12 +315,11 @@ function activateToggleKRs(container) {
     const toggleButton = container.querySelector('.toggle-krs-btn');
     if (!toggleButton) return;
     
-    // Remove listeners anteriores
     toggleButton.replaceWith(toggleButton.cloneNode(true));
     const newToggleButton = container.querySelector('.toggle-krs-btn');
     
     newToggleButton.addEventListener('click', () => {
-        const krList = newToggleButton.nextElementSibling;
+        const krList = container.querySelector('.kr-list');
         const icon = newToggleButton.querySelector('i');
         if (!krList || !icon) return;
 
@@ -267,12 +342,23 @@ function activateAddKRButton(container) {
     const addKrButton = container.querySelector('.add-kr-btn');
     if (!addKrButton) return;
     
-    // Remove listeners anteriores
     addKrButton.replaceWith(addKrButton.cloneNode(true));
     const newAddKrButton = container.querySelector('.add-kr-btn');
     
     newAddKrButton.addEventListener('click', () => {
-        createNewKR(newAddKrButton);
+        const krList = newAddKrButton.parentElement;
+        const newKRElementHTML = createNewKRHTML();
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = newKRElementHTML;
+        const newKRElement = tempDiv.firstElementChild;
+        const taskListContainer = tempDiv.children[1];
+
+        krList.insertBefore(newKRElement, newAddKrButton);
+        krList.insertBefore(taskListContainer, newAddKrButton);
+
+        activateKRFeatures(newKRElement);
+        updateObjectiveProgress(newKRElement);
     });
 }
 
@@ -283,7 +369,6 @@ function activateDeleteObjective(container) {
     const deleteObjectiveButton = container.querySelector('.delete-objective-btn');
     if (!deleteObjectiveButton) return;
     
-    // Remove listeners anteriores
     deleteObjectiveButton.replaceWith(deleteObjectiveButton.cloneNode(true));
     const newDeleteButton = container.querySelector('.delete-objective-btn');
     
@@ -318,33 +403,37 @@ function activateObjectiveIcon(container) {
 }
 
 /**
- * Cria um novo KR
+ * Cria o HTML para um novo KR
+ * @param {object} [data=null] - Dados do KR a ser criado.
+ * @returns {string} - Retorna o HTML do novo KR.
  */
-function createNewKR(addButton) {
-    const krList = addButton.parentElement;
-    if (!krList) return;
+function createNewKRHTML(data = null) {
+    const title = data ? data.title : "Novo KR - Clique para editar";
+    const min = data ? data.min : 0;
+    const max = data ? data.max : 100;
+    const value = data ? data.value : 0;
+    const unit = data ? data.unit : "unidades";
 
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = `
+    return `
         <div class="kr-item">
             <div class="kr-info">
                 <i class='bx bx-target-lock kr-icon'></i>
-                <span class="editable-kr-title">Novo KR - Clique para editar</span>
+                <span class="editable-kr-title">${title}</span>
             </div>
             <div class="kr-progress-slider">
-                <span class="editable-min-value">0</span>
+                <span class="editable-min-value">${min}</span>
                 <div class="slider-track">
                     <div class="slider-fill"></div>
                     <div class="slider-thumb"></div>
                 </div>
                 <div class="kr-max-value-container">
-                    <span class="editable-max-value">100</span>
-                    <span class="kr-parameter-selector">unidades</span>
+                    <span class="editable-max-value">${max}</span>
+                    <span class="kr-parameter-selector">${unit}</span>
                 </div>
             </div>
             <div class="kr-progress-text">
                 <strong>0%</strong>
-                <span>0 / 100</span>
+                <span>${value} / ${max}</span>
             </div>
             <div class="kr-actions">
                 <button class="icon-btn kr-options-btn">
@@ -361,15 +450,6 @@ function createNewKR(addButton) {
                 <i class='bx bx-plus'></i> Adicionar Tarefa
             </button>
         </div>`;
-    
-    const newKRElement = tempDiv.firstElementChild;
-    const taskListContainer = tempDiv.children[1];
-
-    krList.insertBefore(newKRElement, addButton);
-    krList.insertBefore(taskListContainer, addButton);
-    
-    activateKRFeatures(newKRElement);
-    updateObjectiveProgress(newKRElement);
 }
 
 /**
@@ -378,22 +458,11 @@ function createNewKR(addButton) {
 function activateKRFeatures(krElement) {
     if (!krElement) return;
     
-    // Ativa edição do título
     activateKRTitleEdit(krElement);
-    
-    // Ativa edição dos valores min/max
     activateKRValueEdit(krElement);
-    
-    // Ativa menu de opções
     activateKROptionsMenu(krElement);
-    
-    // Ativa slider interativo
     activateKRSlider(krElement);
-    
-    // Ativa ícone clicável
     activateKRIcon(krElement);
-    
-    // Ativa seletor de parâmetros
     activateKRParameterSelector(krElement);
 }
 
@@ -491,62 +560,64 @@ function activateKROptionsMenu(krElement) {
     optionsBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         
-        // Fecha outros menus abertos
-        document.querySelectorAll('.kr-actions-menu').forEach(m => m.style.display = 'none');
+        document.querySelectorAll('.kr-actions-menu').forEach(m => m.remove());
         
-        let menu = krElement.querySelector('.kr-actions-menu');
-        if (!menu) {
-            menu = document.createElement('div'); 
-            menu.className = 'kr-actions-menu';
-            menu.innerHTML = `
-                <button class="add-tasks-btn">
-                    <i class='bx bx-list-plus'></i> Adicionar Tarefas
-                </button>
-                <button class="delete-kr-btn">
-                    <i class='bx bx-trash'></i> Excluir KR
-                </button>`;
-            
-            const actionsContainer = optionsBtn.parentElement;
-            if (actionsContainer) actionsContainer.appendChild(menu);
+        const menu = document.createElement('div');
+        menu.className = 'kr-actions-menu';
+        menu.innerHTML = `
+            <button class="add-tasks-btn">
+                <i class='bx bx-list-plus'></i> Adicionar Tarefas
+            </button>
+            <button class="delete-kr-btn">
+                <i class='bx bx-trash'></i> Excluir KR
+            </button>`;
 
-            // Botão de deletar KR
-            menu.querySelector('.delete-kr-btn').addEventListener('click', async () => {
-                const confirmed = await showCustomConfirm({ 
-                    title: 'Excluir Key Result?', 
-                    message: 'Todos os checkpoints associados também serão removidos.', 
-                    type: 'delete', 
-                    icon: 'bx-trash', 
-                    confirmText: 'Sim, excluir' 
-                });
-                
-                if (confirmed) {
-                    const objectiveItem = krElement.closest('.objective-item');
-                    const taskContainer = krElement.nextElementSibling;
-                    
-                    if (taskContainer && taskContainer.classList.contains('kr-task-list-container')) {
-                        taskContainer.remove();
-                    }
-                    
-                    krElement.remove();
-                    
-                    if (objectiveItem) {
-                        updateObjectiveProgress(objectiveItem);
-                    }
-                }
+        const actionsContainer = optionsBtn.parentElement;
+        if (actionsContainer) actionsContainer.appendChild(menu);
+
+        menu.querySelector('.delete-kr-btn').addEventListener('click', async () => {
+            const confirmed = await showCustomConfirm({
+                title: 'Excluir Key Result?',
+                message: 'Todos os checkpoints associados também serão removidos.',
+                type: 'delete',
+                icon: 'bx-trash',
+                confirmText: 'Sim, excluir'
             });
 
-            // Botão de adicionar tarefas
-            menu.querySelector('.add-tasks-btn').addEventListener('click', () => {
+            if (confirmed) {
+                const objectiveItem = krElement.closest('.objective-item');
                 const taskContainer = krElement.nextElementSibling;
+
                 if (taskContainer && taskContainer.classList.contains('kr-task-list-container')) {
-                    taskContainer.style.display = 'block';
-                    activateTaskList(krElement);
+                    taskContainer.remove();
                 }
-                menu.style.display = 'none';
-            });
-        }
+
+                krElement.remove();
+
+                if (objectiveItem) {
+                    updateObjectiveProgress(objectiveItem);
+                }
+            }
+        });
+
+        menu.querySelector('.add-tasks-btn').addEventListener('click', () => {
+            const taskContainer = krElement.nextElementSibling;
+            if (taskContainer && taskContainer.classList.contains('kr-task-list-container')) {
+                taskContainer.style.display = 'block';
+                activateTaskList(taskContainer);
+            }
+            menu.remove();
+        });
         
         menu.style.display = 'block';
+
+        const closeMenu = (event) => {
+            if (!menu.contains(event.target)) {
+                menu.remove();
+                document.removeEventListener('click', closeMenu);
+            }
+        };
+        document.addEventListener('click', closeMenu);
     });
 }
 
@@ -585,23 +656,19 @@ function activateKRParameterSelector(krElement) {
     });
 }
 
-// --- Funções da Lista de Tarefas (Checkpoints) ---
-
 /**
  * Ativa funcionalidades da lista de tarefas
  */
-function activateTaskList(krItem) {
-    const taskListContainer = krItem.nextElementSibling;
-    if (!taskListContainer || !taskListContainer.classList.contains('kr-task-list-container')) return;
+function activateTaskList(taskListContainer) {
+    if (!taskListContainer) return;
     
     const addTaskBtn = taskListContainer.querySelector('.add-task-btn');
     const taskList = taskListContainer.querySelector('.task-list');
 
     if (addTaskBtn) {
-        addTaskBtn.addEventListener('click', () => createNewTask(taskList));
+        addTaskBtn.addEventListener('click', () => createNewTaskInList(taskList));
     }
     
-    // Funcionalidade de drag and drop
     let draggedItem = null;
     if (taskList) {
         taskList.addEventListener('dragstart', e => {
@@ -631,9 +698,9 @@ function activateTaskList(krItem) {
 }
 
 /**
- * Cria uma nova tarefa
+ * Cria uma nova tarefa na lista
  */
-function createNewTask(taskList) {
+function createNewTaskInList(taskList) {
     if (!taskList) return;
     
     const taskItem = document.createElement('li');
@@ -649,8 +716,6 @@ function createNewTask(taskList) {
         </button>`;
     
     taskList.appendChild(taskItem);
-    
-    // Ativa funcionalidades da tarefa
     activateTaskFeatures(taskItem);
 }
 
@@ -662,14 +727,12 @@ function activateTaskFeatures(taskItem) {
     const taskText = taskItem.querySelector('.editable-task');
     const deleteBtn = taskItem.querySelector('.delete-task-btn');
     
-    // Checkbox
     if (checkbox) {
         checkbox.addEventListener('change', () => {
             taskItem.classList.toggle('completed', checkbox.checked);
         });
     }
     
-    // Edição do texto
     if (taskText) {
         taskText.addEventListener('click', () => {
             if (taskText.querySelector('input')) return;
@@ -703,7 +766,6 @@ function activateTaskFeatures(taskItem) {
         });
     }
     
-    // Botão de deletar
     if (deleteBtn) {
         deleteBtn.addEventListener('click', () => {
             taskItem.remove();
@@ -711,9 +773,6 @@ function activateTaskFeatures(taskItem) {
     }
 }
 
-/**
- * Função auxiliar para drag and drop
- */
 function getDragAfterElement(container, y) {
     const draggableElements = [...container.querySelectorAll('.task-item:not(.dragging)')];
     
@@ -729,11 +788,6 @@ function getDragAfterElement(container, y) {
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
-// --- Funções de Atualização e Cálculos ---
-
-/**
- * Renumera todos os objetivos
- */
 function renumberObjectives() {
     const objectives = document.querySelectorAll('.objective-item');
     objectives.forEach((objective, index) => {
@@ -744,9 +798,6 @@ function renumberObjectives() {
     });
 }
 
-/**
- * Atualiza o progresso de um objetivo
- */
 function updateObjectiveProgress(elementInsideObjective) {
     const objectiveItem = elementInsideObjective.closest('.objective-item');
     if (!objectiveItem) {
@@ -769,13 +820,11 @@ function updateObjectiveProgress(elementInsideObjective) {
         averageProgress = Math.round(totalProgress / allKrItems.length);
     }
     
-    // Atualiza detalhes do progresso
     const progressDetails = objectiveItem.querySelector('.progress-details strong');
     if (progressDetails) {
         progressDetails.innerHTML = `<i class='bx bxs-flag-checkered'></i> ${allKrItems.length} KRs`;
     }
     
-    // Atualiza botão de toggle
     const toggleButton = objectiveItem.querySelector('.toggle-krs-btn');
     if (toggleButton) {
         const icon = toggleButton.querySelector('i');
@@ -783,7 +832,6 @@ function updateObjectiveProgress(elementInsideObjective) {
         if (icon) toggleButton.appendChild(icon);
     }
     
-    // Atualiza gráfico
     const canvas = objectiveItem.querySelector('canvas');
     if (canvas) {
         renderDoughnutChart(canvas.id, averageProgress);
@@ -792,9 +840,6 @@ function updateObjectiveProgress(elementInsideObjective) {
     updateCompletedObjectivesKPI();
 }
 
-/**
- * Torna um slider interativo
- */
 function makeSliderInteractive(sliderContainer) {
     const sliderTrack = sliderContainer.querySelector('.slider-track');
     const sliderFill = sliderContainer.querySelector('.slider-fill');
@@ -820,7 +865,7 @@ function makeSliderInteractive(sliderContainer) {
         if(sliderFill) sliderFill.style.width = `${percentage}%`;
         if(sliderThumb) sliderThumb.style.left = `${percentage}%`;
         if(progressText) progressText.textContent = `${Math.round(percentage)}%`;
-        if(progressSubtext) progressSubtext.textContent = `${clampedValue} / ${maxValue}`;
+        if(progressSubtext) progressSubtext.textContent = `${clampedValue} / ${max}`;
         
         updateObjectiveProgress(sliderContainer);
     }
@@ -833,7 +878,6 @@ function makeSliderInteractive(sliderContainer) {
         return Math.round(minValue + (percentage / 100) * (maxValue - minValue));
     }
 
-    // Event listeners para o slider
     if(sliderThumb) {
         sliderThumb.addEventListener('mousedown', (e) => { 
             isDragging = true; 
@@ -867,16 +911,10 @@ function makeSliderInteractive(sliderContainer) {
         } 
     });
     
-    // Inicializa com valor atual
-    if(progressSubtext) {
-        const currentValue = parseInt(progressSubtext.textContent.split(' / ')[0]) || 0;
-        updateSlider(currentValue);
-    }
+    const currentValue = parseInt(progressSubtext.textContent.split(' / ')[0]) || 0;
+    updateSlider(currentValue);
 }
 
-/**
- * Atualiza KPI de objetivos completados no formato correto X/Y
- */
 function updateCompletedObjectivesKPI() {
     const objectives = document.querySelectorAll('.objective-item');
     let completedCount = 0;
@@ -890,18 +928,12 @@ function updateCompletedObjectivesKPI() {
         }
     });
     
-    // Atualiza o KPI no formato X/Y
     const kpiElement = document.getElementById('kpi-objetivos-concluidos');
     if (kpiElement) {
         kpiElement.textContent = `${completedCount}/${totalCount}`;
     }
-    
-    console.log(`KPI atualizado: ${completedCount}/${totalCount} objetivos concluídos`);
 }
 
-/**
- * Redesenha todos os gráficos (usado quando o tema muda)
- */
 function redrawAllCharts() {
     document.querySelectorAll('.objective-item canvas').forEach(canvas => {
         const objectiveItem = canvas.closest('.objective-item');
@@ -915,17 +947,8 @@ function redrawAllCharts() {
     });
 }
 
-/**
- * Renderiza um gráfico de rosca (doughnut chart)
- * Esta função deve ser implementada externamente ou importada
- */
 function renderDoughnutChart(canvasId, progress) {
-    // Esta função deve ser implementada no arquivo de gráficos
-    // ou importada de uma biblioteca como Chart.js
     if (typeof window.renderDoughnutChart === 'function') {
         window.renderDoughnutChart(canvasId, progress);
-    } else {
-        console.log(`Renderizando gráfico ${canvasId} com progresso ${progress}%`);
     }
 }
-

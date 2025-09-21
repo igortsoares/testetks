@@ -7,7 +7,7 @@
 
 import { initUI } from './modules/ui.js';
 import { initOKRs } from './modules/okrs.js';
-import { api } from './modules/api.js';
+import { api } from './api.js';
 import { initFlow } from './modules/flow.js';
 // [NOVO] Importa a função de inicialização do módulo Agenda
 import { initAgenda } from './modules/agenda.js';
