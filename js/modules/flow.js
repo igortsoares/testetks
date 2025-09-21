@@ -478,7 +478,7 @@ function showBrowserNotification() {
     if (Notification.permission === 'granted') {
         new Notification('🎯 Pomodoro Concluído!', {
             body: `Hora de uma pausa! Você completou um ciclo de foco.`,
-            icon: 'assets/logo.png'
+            icon: 'assets/images/logo.png'
         });
     } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(p => { if (p === 'granted') showBrowserNotification(); });

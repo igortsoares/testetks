@@ -2,7 +2,7 @@
 
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <img src="assets/logo.png" alt="Logo TKS Vantagens" class="logo">
+        <img src="assets/images/logo.png" alt="Logo TKS Vantagens" class="logo">
     </div>
     <nav class="sidebar-nav">
         <ul>
