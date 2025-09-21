@@ -1,0 +1,296 @@
+/*
+ * Arquivo: style.css
+ * Objetivo: Estilos para a página de login.
+ * Versão: 5.0 - Design final com fundo branco e caixa flutuante.
+*/
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 1: ESTILOS GERAIS E LAYOUT
+ * =====================================================================================
+*/
+body {
+    /* Define a fonte padrão para todo o projeto. */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Remove margens padrão do navegador. */
+    margin: 0;
+    
+    /* INSTRUÇÃO: Define o fundo como totalmente branco, conforme a imagem. */
+    background-color: #ffffff; 
+    
+    /* Melhora a renderização das fontes em telas de alta resolução. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* 
+ * Container principal que organiza a página.
+ * Usa Flexbox para alinhar a logo e a caixa de login em uma coluna, perfeitamente centralizada.
+*/
+.page-container {
+    display: flex;
+    flex-direction: column;   /* Itens empilhados na vertical. */
+    align-items: center;      /* Itens centralizados na horizontal. */
+    justify-content: center;  /* Itens centralizados na vertical. */
+    width: 100%;
+    min-height: 100vh;        /* Garante que o container ocupe a tela inteira. */
+    padding: 20px;            /* Espaçamento para evitar que o conteúdo cole nas bordas em telas pequenas. */
+    box-sizing: border-box;   /* Garante que o padding não afete a largura total. */
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 2: ESTILO DA LOGO
+ * =====================================================================================
+*/
+.logo {
+    /* INSTRUÇÃO: Largura da logo ajustada para ser menor e mais sutil, como na imagem. */
+    width: 150px; 
+    height: auto; /* Mantém a proporção da imagem. */
+    
+    /* Espaçamento abaixo da logo para separá-la da caixa de login. */
+    margin-bottom: 40px; 
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 3: ESTILOS DO CONTAINER DE LOGIN (CAIXA FLUTUANTE)
+ * =====================================================================================
+*/
+.login-container {
+    background-color: white;
+    padding: 35px; /* Espaçamento interno ajustado. */
+    border-radius: 16px; /* Bordas mais arredondadas para um visual suave. */
+    
+    /* INSTRUÇÃO: Sombra suave que cria o efeito "flutuante". */
+    box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.08);
+    
+    width: 100%;
+    max-width: 360px; /* Largura máxima da caixa. */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-container h1 {
+    font-weight: 600; /* Peso da fonte um pouco mais leve. */
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: #333; /* Cor do título um pouco mais suave. */
+}
+
+.login-container input {
+    width: 100%;
+    padding: 14px; 
+    margin-bottom: 16px;
+    border: 1px solid #f0f0f0; /* Borda bem clara. */
+    background-color: #fafafa; /* Fundo do input quase branco. */
+    border-radius: 10px; /* Bordas dos inputs arredondadas. */
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+.login-container input::placeholder {
+    color: #aaa;
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 4: ESTILO DO BOTÃO
+ * =====================================================================================
+*/
+
+/* Animação do gradiente (sem alteração) */
+@keyframes moveGrad {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.login-container button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px; /* Mesma borda dos inputs para consistência. */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px; /* Espaço extra acima do botão. */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    /* Gradiente roxo/azul da imagem. */
+    background-image: linear-gradient(135deg, #c353c3, #6b47dc, #c353c3);
+    background-size: 250% 250%;
+    animation: moveGrad 6s linear infinite;
+}
+
+.login-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 7: ESTILO DAS MENSAGENS DE FEEDBACK (ATUALIZADO)
+ * =====================================================================================
+*/
+.feedback-message {
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    display: none; /* Escondido por padrão */
+}
+
+.feedback-message:not(:empty) {
+    display: block; /* Mostra o elemento se ele tiver texto. */
+}
+
+/* Classe para mensagens de erro */
+.feedback-message.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+/* Classe para mensagens de sucesso */
+.feedback-message.success {
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 5: ESTILO DO BOTÃO SECUNDÁRIO (ADICIONADO)
+ * =====================================================================================
+*/
+.secondary-button {
+    /* Remove o sublinhado padrão dos links. */
+    text-decoration: none;
+    
+    /* Cor do texto do botão. */
+    color: #666;
+    
+    /* Tamanho da fonte. */
+    font-size: 14px;
+    font-weight: 500;
+    
+    /* Exibe como um bloco para ocupar a largura e permitir margem. */
+    display: block;
+    
+    /* Espaçamento acima do botão para separá-lo do formulário. */
+    margin-top: 20px;
+    
+    /* Transição suave para o efeito hover. */
+    transition: color 0.2s ease;
+}
+
+.secondary-button:hover {
+    /* Muda a cor do texto ao passar o mouse. */
+    color: #000;
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 6: ESTILO DOS CAMPOS DE SELEÇÃO <select> (ADICIONADO)
+ * =====================================================================================
+*/
+
+/* 
+ * Aplica os mesmos estilos dos inputs aos selects para manter a consistência visual.
+*/
+.login-container select {
+    width: 100%;
+    padding: 14px; 
+    margin-bottom: 16px;
+    border: 1px solid #f0f0f0;
+    background-color: #fafafa;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 15px;
+    font-family: inherit; /* Garante que o select use a mesma fonte do resto da página. */
+    
+    /* Cor do texto do select. */
+    color: #333;
+    
+    /* Remove a aparência padrão do sistema operacional para podermos estilizar. */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    /* Adiciona uma seta personalizada usando um gradiente CSS. */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e" );
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+/* 
+ * Estiliza a opção de placeholder (ex: "Selecione o tipo de usuário").
+ * Quando nenhuma opção está selecionada, o texto fica cinza, como um placeholder.
+*/
+.login-container select:required:invalid {
+    color: #aaa;
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 8: ESTILOS PARA VALIDAÇÃO POR CAMPO (ADICIONADO)
+ * =====================================================================================
+*/
+
+/* Container para cada grupo de campo (input + mensagem de erro) */
+.form-group {
+    /* Remove a margem de baixo dos inputs/selects para o grupo controlar o espaçamento. */
+    margin-bottom: 16px;
+    position: relative; /* Necessário para o posicionamento da mensagem de erro. */
+    text-align: left; /* Alinha o texto de erro à esquerda. */
+}
+
+/* Remove a margem que estava diretamente nos inputs/selects */
+.login-container input,
+.login-container select {
+    margin-bottom: 0;
+}
+
+/* Estilo para o texto de erro individual de cada campo */
+.error-text {
+    color: #d93025; /* Cor vermelha para o erro. */
+    font-size: 12px; /* Fonte pequena. */
+    margin: 4px 0 0 8px; /* Espaçamento (topo, direita, baixo, esquerda). */
+    display: none; /* Escondido por padrão. */
+}
+
+/* Estilo para destacar o campo (input/select) quando ele tem um erro */
+.input-error {
+    border-color: #d93025 !important; /* Borda vermelha, !important para sobrepor outros estilos. */
+    background-color: #fff8f8 !important; /* Fundo levemente avermelhado. */
+}
+
+/* 
+ * =====================================================================================
+ * INSTRUÇÃO 9: ESTILO PARA O TEXTO INFORMATIVO DA SENHA (ADICIONADO)
+ * =====================================================================================
+*/
+
+/* Estilo para o texto de ajuda/dica abaixo do campo de senha */
+.password-hint {
+    color: #888; /* Cor cinza, para ser sutil. */
+    font-size: 12px;
+    text-align: left;
+    margin: 4px 0 0 8px; /* Espaçamento similar ao texto de erro. */
+    padding: 0;
+    line-height: 1; /* Garante que não adicione altura extra. */
+}
+
+/* 
+ * Quando um erro aparece para o campo de senha, o texto de dica é escondido
+ * para evitar poluição visual.
+*/
+.form-group.error .password-hint {
+    display: none;
+}
+

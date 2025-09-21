@@ -1,0 +1,380 @@
+/* ================================================================ */
+/* Arquivo: /css/main.css                                           */
+/* DescriÃ§Ã£o: Ponto de entrada do CSS. Define variÃ¡veis globais,    */
+/*            estilos base e importa todos os outros arquivos.      */
+/* ================================================================ */
+
+/* Importa a fonte principal */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Importa os componentes e pÃ¡ginas */
+@import url('components/sidebar.css');
+@import url('components/modals.css');
+@import url('pages/dashboard.css');
+@import url('/flow.css');
+@import url('/agenda.css');
+
+/* ================================================================ */
+/* VARIÃVEIS CSS GLOBAIS                                            */
+/* ================================================================ */
+
+:root {
+    /* Tema Claro (PadrÃ£o) */
+    --sidebar-bg: linear-gradient(to bottom, #5c1a4d, #b92b7c);
+    --main-bg: #f4f5f7;
+    --card-bg: #ffffff;
+    --primary-text: #1e293b;
+    --secondary-text: #64748b;
+    --border-color: #e2e8f0;
+    --primary-accent: #8338ec;
+    --primary-accent-light: #f3e9ff;
+    --primary-accent-hover: #7c3aed;
+    --slider-track-bg: #e2e8f0;
+    --success-color: #22c55e;
+    --success-color-hover: #16a34a;
+    --danger-color: #ef4444;
+    --danger-color-hover: #dc2626;
+    --warning-color: #f59e0b;
+    --warning-color-hover: #d97706;
+    --info-color: #3b82f6;
+    --info-color-hover: #2563eb;
+    
+    /* Sombras */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    /* Raios de borda */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    
+    /* EspaÃ§amentos */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* TransiÃ§Ãµes */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* DefiniÃ§Ã£o das cores para o Modo Noturno */
+body.dark-mode {
+    --main-bg: #111827;
+    --card-bg: #1f2937;
+    --primary-text: #f9fafb;
+    --secondary-text: #9ca3af;
+    --border-color: #374151;
+    --primary-accent-light: #3730a3;
+    --slider-track-bg: #4b5563;
+    
+    /* Sombras para modo escuro */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* ================================================================ */
+/* ESTILOS GLOBAIS E BASE                                           */
+/* ================================================================ */
+
+/* Reset bÃ¡sico */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Estilos do body */
+body { 
+    font-family: 'Inter', sans-serif; 
+    margin: 0; 
+    padding: 0;
+    background-color: var(--main-bg); 
+    color: var(--primary-text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container principal do dashboard */
+.dashboard-container { 
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ================================================================ */
+/* TRANSIÃ‡Ã•ES GLOBAIS                                               */
+/* ================================================================ */
+
+/* TransiÃ§Ã£o suave de cores em todos os elementos principais */
+body, 
+.sidebar, 
+.main-content, 
+.card-bg, 
+.kpi-card, 
+.objective-item, 
+.department-dropdown, 
+.filter-buttons, 
+.period-btn, 
+.year-select, 
+.add-kr-btn, 
+.custom-confirm-modal, 
+.icon-picker-modal, 
+.parameter-picker-modal,
+.kr-item,
+.task-item,
+.primary-action-btn,
+.icon-btn {
+    transition: 
+        background-color var(--transition-normal), 
+        color var(--transition-normal), 
+        border-color var(--transition-normal),
+        box-shadow var(--transition-normal),
+        transform var(--transition-fast);
+}
+
+/* ================================================================ */
+/* UTILITÃRIOS GLOBAIS                                              */
+/* ================================================================ */
+
+/* Classes de visibilidade */
+.hidden {
+    display: none !important;
+}
+
+.invisible {
+    visibility: hidden !important;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Classes de texto */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-sm {
+    font-size: 0.875rem;
+}
+
+.text-lg {
+    font-size: 1.125rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.font-medium {
+    font-weight: 500;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
+/* Classes de cor */
+.text-primary {
+    color: var(--primary-text);
+}
+
+.text-secondary {
+    color: var(--secondary-text);
+}
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-danger {
+    color: var(--danger-color);
+}
+
+.text-warning {
+    color: var(--warning-color);
+}
+
+.text-info {
+    color: var(--info-color);
+}
+
+/* Classes de espaÃ§amento */
+.m-0 { margin: 0; }
+.mt-1 { margin-top: var(--spacing-xs); }
+.mt-2 { margin-top: var(--spacing-sm); }
+.mt-3 { margin-top: var(--spacing-md); }
+.mt-4 { margin-top: var(--spacing-lg); }
+
+.mb-1 { margin-bottom: var(--spacing-xs); }
+.mb-2 { margin-bottom: var(--spacing-sm); }
+.mb-3 { margin-bottom: var(--spacing-md); }
+.mb-4 { margin-bottom: var(--spacing-lg); }
+
+.p-0 { padding: 0; }
+.p-1 { padding: var(--spacing-xs); }
+.p-2 { padding: var(--spacing-sm); }
+.p-3 { padding: var(--spacing-md); }
+.p-4 { padding: var(--spacing-lg); }
+
+/* ================================================================ */
+/* ESTADOS DE INTERAÃ‡ÃƒO                                             */
+/* ================================================================ */
+
+/* Estados de foco */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--primary-accent);
+    outline-offset: 2px;
+}
+
+/* Estados de hover para elementos interativos */
+button:hover,
+.clickable:hover {
+    transform: translateY(-1px);
+}
+
+/* Estados de ativo */
+button:active,
+.clickable:active {
+    transform: translateY(0);
+}
+
+/* Estados de desabilitado */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ================================================================ */
+/* RESPONSIVIDADE GLOBAL                                            */
+/* ================================================================ */
+
+/* Breakpoints */
+@media (max-width: 768px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+    
+    .text-sm-center {
+        text-align: center;
+    }
+    
+    .hidden-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .hidden-desktop {
+        display: none !important;
+    }
+}
+
+/* ================================================================ */
+/* ANIMAÃ‡Ã•ES GLOBAIS                                                */
+/* ================================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Classes de animaÃ§Ã£o */
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ================================================================ */
+/* MELHORIAS DE ACESSIBILIDADE                                      */
+/* ================================================================ */
+
+/* Reduz movimento para usuÃ¡rios que preferem menos animaÃ§Ã£o */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Melhora o contraste para usuÃ¡rios com preferÃªncia de alto contraste */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000000;
+        --primary-text: #000000;
+        --secondary-text: #333333;
+    }
+    
+    body.dark-mode {
+        --border-color: #ffffff;
+        --primary-text: #ffffff;
+        --secondary-text: #cccccc;
+    }
+}

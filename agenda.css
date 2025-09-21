@@ -1,0 +1,315 @@
+/* ================================================================ */
+/* Agenda CSS                                                       */
+/* Versão: 1.4                                                      */
+/* Atualizado em: 19/09/2025 às 18:55                               */
+/* ================================================================ */
+
+.agenda-header-section p {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin-bottom: 2rem;
+}
+
+.google-connect-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.google-connect-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.connect-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.google-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    flex-wrap: wrap;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-event-btn-header {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    color: var(--primary-text);
+    cursor: pointer;
+    margin-left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.add-event-btn-header:hover {
+    background-color: var(--main-bg);
+}
+
+.agenda-main-grid {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.agenda-left-column, .agenda-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Seção 2.3: Calendário do Mês */
+.calendar-month-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.calendar-nav {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.calendar-nav button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--secondary-text);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+.calendar-nav button:hover {
+    background-color: var(--main-bg);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--secondary-text);
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+}
+
+.calendar-day {
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    position: relative;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.calendar-day.other-month { color: var(--secondary-text); opacity: 0.5; pointer-events: none; }
+.calendar-day.selected { background: var(--primary-accent); color: white; }
+.calendar-day:not(.selected):hover { background: var(--main-bg); }
+
+.event-dots-container {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+}
+.event-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+}
+.event-dot.status-Confirmado { background-color: var(--success-color); }
+.event-dot.status-Aguardando { background-color: var(--warning-color); }
+.event-dot.status-Cancelado { background-color: var(--danger-color); }
+.calendar-day.selected .event-dot { background-color: white; }
+
+
+/* Seção 2.4: Calendário do Dia */
+.today-schedule-section {
+    background: var(--primary-accent);
+    color: white;
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+}
+.today-schedule-section h4 { text-transform: uppercase; font-size: 0.8rem; margin: 0 0 0.25rem 0; opacity: 0.8; }
+.today-schedule-section p { font-size: 0.9rem; margin: 0 0 1.5rem 0; }
+.event-list .empty-list {
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    padding: 2rem 0;
+}
+
+.event-item { display: flex; align-items: flex-start; gap: 1rem; }
+.event-time { font-size: 0.9rem; font-weight: 500; text-align: right; flex-shrink: 0; width: 50px; }
+.event-time span { display: block; font-size: 0.8rem; opacity: 0.7; }
+
+/* [CORREÇÃO] Alinhamento dos detalhes do evento */
+.event-details.event-details-aligned {
+    flex-grow: 1;
+    text-align: left;
+}
+.event-details p { font-size: 0.9rem; font-weight: 500; margin: 0 0 0.25rem 0; line-height: 1.4; }
+
+.tag { font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; }
+.tag-green { background: #16a34a; }
+.tag-blue { background: #2563eb; }
+
+.today-schedule-section .icon-btn { color: white; background: rgba(255,255,255,0.2); border-radius: 50%; width: 32px; height: 32px; flex-shrink: 0; }
+.today-schedule-section .icon-btn:hover { background: rgba(255,255,255,0.3); }
+
+/* Seção 2.5: Tarefas de Hoje */
+.today-tasks-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+}
+.tasks-header-agenda { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.tasks-header-agenda h4 { margin: 0; }
+.tasks-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.task-item-agenda { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+.task-item-agenda .task-checkbox { width: 18px; height: 18px; border: 2px solid var(--secondary-text); border-radius: 4px; cursor: pointer; flex-shrink: 0; position: relative; }
+
+/* [NOVO] Estilo do checkmark para o checkbox */
+.task-item-agenda .task-checkbox::after {
+    content: '\ea48';
+    font-family: 'boxicons' !important;
+    font-size: 16px;
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.2s ease;
+}
+.task-item-agenda.completed .task-checkbox { background-color: var(--success-color); border-color: var(--success-color); }
+.task-item-agenda.completed .task-checkbox::after { transform: translate(-50%, -50%) scale(1); }
+
+/* [NOVO] Estilo de texto tachado para tarefas concluídas */
+.task-item-agenda.completed .task-title-agenda {
+    text-decoration: line-through;
+    color: var(--secondary-text);
+}
+
+.task-title-agenda { flex-grow: 1; }
+.tasks-list .empty-list {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* Seção 2.6: Agenda da Semana */
+.week-schedule-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+}
+
+/* [CORREÇÃO] Estilos para o cabeçalho da agenda da semana */
+.week-schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.week-schedule-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.week-day-group { margin-bottom: 1.5rem; }
+.week-day-group:last-child { margin-bottom: 0; }
+.week-day-group h5 { font-size: 0.9rem; text-transform: uppercase; margin: 0; }
+.week-day-group > p { font-size: 0.8rem; color: var(--secondary-text); margin: 0 0 1rem 0; }
+.week-schedule-content .empty-list {
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    padding: 2rem 0;
+}
+
+.event-item-week { 
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    padding: 0.75rem 0; 
+    border-bottom: 1px solid var(--border-color); 
+}
+.event-item-week:last-child { border-bottom: none; }
+
+.event-status-bar {
+    width: 4px;
+    height: 38px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+.event-status-bar.status-Confirmado { background-color: var(--success-color); }
+.event-status-bar.status-Aguardando { background-color: var(--warning-color); }
+.event-status-bar.status-Cancelado { background-color: var(--danger-color); }
+
+.event-time-week { font-weight: 500; font-size: 0.9rem; flex-shrink: 0; width: 60px; }
+.event-time-week span { display: block; font-size: 0.8rem; color: var(--secondary-text); }
+.event-details-week { flex-grow: 1; }
+.event-details-week p { margin: 0 0 0.25rem 0; font-size: 0.9rem; line-height: 1.4;}
+.icon-btn { border:none; background: transparent; cursor: pointer; color: var(--secondary-text); }
+.event-item-week .icon-btn { background: var(--main-bg); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+
+.dark-mode .add-event-btn-header {
+    border-color: var(--border-color);
+    color: var(--primary-text);
+}
+

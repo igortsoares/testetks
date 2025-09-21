@@ -1,0 +1,541 @@
+/* ================================================================ */
+/* Flow CSS                                                         */
+/* Versão: 3.4                                                      */
+/* Atualizado em: 19/09/2025 às 16:39                               */
+/* ================================================================ */
+
+/* ============================================================ */
+/* CABEÇALHO DO MÓDULO                                         */
+/* ============================================================ */
+.flow-header-section {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.flow-description {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* ============================================================ */
+/* SEÇÃO CICLO DE FOCO (REFINADO)                             */
+/* ============================================================ */
+.flow-focus-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.focus-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.focus-main {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-grow: 1;
+}
+
+.focus-title h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.focus-title p {
+    font-size: 0.875rem;
+    color: var(--secondary-text);
+    margin: 0;
+}
+
+.timer-text {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    user-select: none;
+}
+
+.timer-text:hover {
+    transform: scale(1.05);
+    opacity: 0.8;
+}
+
+.focus-controls {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.timer-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.timer-btn-start { background: var(--primary-accent); color: white; }
+.timer-btn-start:hover { background: var(--primary-accent-hover); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.timer-btn-reset { background: var(--main-bg); color: var(--primary-text); border: 1px solid var(--border-color); }
+.timer-btn-reset:hover { background-color: var(--border-color); }
+.timer-btn-pause { background: var(--danger-color); color: white; }
+.timer-btn-pause:hover { background: var(--danger-color-hover); }
+
+.focus-stats {
+    display: flex;
+    gap: 2rem;
+    flex-shrink: 0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--secondary-text);
+    text-transform: uppercase;
+    display: block;
+}
+
+.stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    display: block;
+}
+
+/* ============================================================ */
+/* SEÇÃO MISSÕES                                              */
+/* ============================================================ */
+.flow-missions-section {
+    margin-bottom: 2rem;
+}
+
+.missions-header h2 {
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.missions-header p {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin-bottom: 1.5rem;
+}
+
+.missions-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.mission-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.mission-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.mission-completed .mission-icon { background: var(--success-color); }
+.mission-today .mission-icon { background: var(--warning-color); }
+.mission-tomorrow .mission-icon { background: var(--info-color); }
+
+.mission-info h3 {
+    font-size: 1rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.mission-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.overall-progress {
+    display: flex;
+    justify-content: center;
+}
+
+.progress-circle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
+    stroke: var(--primary-accent);
+}
+
+.progress-circle.completed .progress-ring-circle {
+    stroke: var(--success-color);
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.progress-percentage {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* ============================================================ */
+/* PROGRESSO DETALHADO DAS MISSÕES                             */
+/* ============================================================ */
+.flow-detailed-progress-section {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.detailed-progress-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.detailed-progress-header h2 {
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.detailed-progress-header p {
+    font-size: 1rem;
+    color: var(--secondary-text);
+    margin: 0;
+}
+
+.detailed-progress-content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+}
+
+.progress-bars-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.progress-item .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.progress-label { font-weight: 500; }
+
+.progress-percentage {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--secondary-text);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background-color: var(--main-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.progress-fill-completed { background: var(--success-color); }
+.progress-fill-today { background: var(--warning-color); }
+.progress-fill-tomorrow { background: var(--info-color); }
+
+.progress-count {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin-top: 0.5rem;
+}
+
+.progress-legend ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.progress-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+}
+
+.legend-color-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+/* ============================================================ */
+/* MATRIZ DE EISENHOWER                                        */
+/* ============================================================ */
+.flow-matrix-section {
+    margin-bottom: 2rem;
+}
+
+.matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.matrix-quadrant {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    min-height: 200px;
+}
+
+.quadrant-urgent-important { border-left: 4px solid var(--success-color); }
+.quadrant-not-urgent-important { border-left: 4px solid var(--warning-color); }
+.quadrant-urgent-not-important { border-left: 4px solid var(--info-color); }
+.quadrant-not-urgent-not-important { border-left: 4px solid var(--secondary-text); }
+
+.quadrant-header h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.quadrant-header p {
+    font-size: 0.9rem;
+    color: var(--secondary-text);
+    margin: 0 0 1rem 0;
+}
+
+.quadrant-tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.task-item {
+    background: var(--main-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--secondary-text);
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.task-checkbox.checked {
+    background: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.task-text {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.task-text.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.task-actions { display: flex; gap: 0.5rem; }
+
+.task-action-btn {
+    width: 28px; height: 28px; border: none; border-radius: 4px;
+    background: transparent; color: var(--secondary-text); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.task-action-btn:hover { background: var(--border-color); color: var(--primary-text); }
+
+/* ============================================================ */
+/* LISTA DE TAREFAS                                           */
+/* ============================================================ */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.toggle-tasks-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    color: var(--primary-text);
+    transition: all var(--transition-normal);
+}
+
+.dark-mode .toggle-tasks-btn {
+    background: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--primary-text);
+}
+
+.toggle-tasks-btn:hover {
+    background-color: var(--main-bg);
+}
+
+/* [MELHORIA] Adicionado align-items para centralizar verticalmente */
+.tasks-actions { 
+    display: flex; 
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.add-task-btn, .clear-completed-btn {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.25rem; border: none;
+    border-radius: var(--radius-lg); font-size: 0.9rem;
+    font-weight: 500; cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.add-task-btn { background: var(--primary-accent); color: white; }
+.add-task-btn:hover { background: var(--primary-accent-hover); transform: translateY(-2px); }
+.clear-completed-btn { background: var(--danger-color); color: white; }
+.clear-completed-btn:hover { background: var(--danger-color-hover); transform: translateY(-2px); }
+
+.tasks-table-container {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    overflow-x: auto;
+}
+
+.tasks-table { width: 100%; border-collapse: collapse; }
+.tasks-table th, .tasks-table td { padding: 1rem; border-bottom: 1px solid var(--border-color); white-space: nowrap; }
+.tasks-table th { background: var(--main-bg); text-align: left; }
+.tasks-table tr:last-child td { border-bottom: none; }
+.tasks-table tr:hover { background-color: var(--main-bg); }
+
+.dark-mode .tasks-table td,
+.dark-mode .tasks-table th {
+    color: var(--primary-text);
+}
+.dark-mode .tasks-table tr:hover {
+    background-color: #374151;
+}
+
+.priority-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; text-transform: uppercase; color: white; }
+.priority-urgent-important { background: var(--success-color); }
+.priority-not-urgent-important { background: var(--warning-color); }
+.priority-urgent-not-important { background: var(--info-color); }
+.priority-not-urgent-not-important { background: var(--secondary-text); }
+
+.status-badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+.status-pending { background: var(--warning-color); color: white; }
+.status-completed { background: var(--success-color); color: white; }
+
+/* ============================================================ */
+/* BOTÃO FLUTUANTE E MODAIS                                   */
+/* ============================================================ */
+.floating-add-btn {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 56px; height: 56px; border: none; border-radius: 50%;
+    background: var(--primary-accent); color: white; font-size: 1.5rem;
+    cursor: pointer; box-shadow: var(--shadow-lg); transition: all var(--transition-normal);
+    z-index: 1000;
+}
+.floating-add-btn:hover { transform: scale(1.1) translateY(-2px); }
+
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; backdrop-filter: blur(4px); }
+.modal.show { display: flex; align-items: center; justify-content: center; }
+.modal-content { background: var(--card-bg); border-radius: var(--radius-xl); box-shadow: var(--shadow-lg); max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto; animation: modalSlideIn 0.3s ease; }
+.modal-small { max-width: 400px; }
+@keyframes modalSlideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--border-color); }
+.modal-title { font-size: 1.3rem; margin: 0; }
+.modal-close { width: 32px; height: 32px; border: none; border-radius: 50%; background: var(--main-bg); color: var(--secondary-text); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { background: var(--border-color); color: var(--primary-text); }
+.modal-body { padding: 1.5rem; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; padding: 1.5rem; border-top: 1px solid var(--border-color); }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-weight: 500; margin-bottom: 0.5rem; }
+.form-input, .form-select { width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); background: var(--card-bg); color: var(--primary-text); font-size: 0.9rem; }
+.form-input:focus, .form-select:focus { outline: none; border-color: var(--primary-accent); box-shadow: 0 0 0 3px rgba(131, 56, 236, 0.1); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.btn { padding: 0.75rem 1.5rem; border: none; border-radius: var(--radius-lg); font-size: 0.9rem; font-weight: 500; cursor: pointer; }
+.btn-primary { background: var(--primary-accent); color: white; }
+.btn-primary:hover { background: var(--primary-accent-hover); }
+.btn-secondary { background: var(--main-bg); color: var(--primary-text); border: 1px solid var(--border-color); }
+.btn-secondary:hover { background: var(--border-color); }
+
+/* ============================================================ */
+/* RESPONSIVIDADE                                             */
+/* ============================================================ */
+@media (max-width: 992px) {
+    .focus-container { flex-direction: column; align-items: stretch; }
+    .focus-main { justify-content: space-between; }
+    .focus-stats { justify-content: space-around; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+    
+    .missions-cards { grid-template-columns: 1fr 1fr; }
+    .overall-progress { grid-column: 1 / -1; justify-self: center; }
+    .detailed-progress-content { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .focus-main { flex-direction: column; text-align: center; gap: 1rem; }
+    .missions-cards, .matrix-grid, .form-row { grid-template-columns: 1fr; }
+    .tasks-header { flex-direction: column; gap: 1rem; align-items: stretch; }
+    .tasks-actions { justify-content: center; }
+}
+

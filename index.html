@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gestão - Login</title>
+    <!-- A versão foi incrementada para v=1.1 para garantir que o navegador puxe o novo CSS -->
+    <link rel="stylesheet" href="style.css?v=1.1">
+</head>
+<body>
+    <div class="page-container">
+        <img src="assets/logo.png" alt="Logo TKS Vantagens" class="logo">
+        <div class="login-container">
+            <h1>Acessar Painel</h1>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="Seu e-mail" required>
+                <input type="password" id="password" placeholder="Sua senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            
+            <!-- 
+                INSTRUÇÃO: Novo link para a página de criação de usuário.
+                - É uma tag <a> (link) que leva para 'criar-usuario.html'.
+                - A classe 'secondary-button' será usada para estilizá-lo de forma diferente.
+            -->
+            <a href="criar-usuario.html" class="secondary-button">Criar Usuário</a>
+
+            <p id="error-message" class="error-message"></p>
+        </div>
+    </div>
+    <!-- A versão do JS também foi incrementada -->
+    <script src="login.js?v=1.1"></script>
+</body>
+</html>
